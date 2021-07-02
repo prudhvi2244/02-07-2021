@@ -1,0 +1,128 @@
+Difference between Traditional Collections and Concurrent Collections in java
+--------------------------------------------------------------------------------
+* We all know about about Traditional Collections ( i.e. List, Set, Queue and its implemented 
+Classes) and Concurrent Collection (i.e. ConcurrentMap interface, ConcurrentHashMap class,
+CopyOnWriteArrayList class etc).
+
+* In these two Collections, there are few differences like:
+
+* Most of the Classes which are present in Traditional Collections (i.e ArrayList, LinkedList,
+  HashMap etc) are non-synchronized in nature and Hence there is no thread-safety. 
+  But All the classes present in Concurrent Collections are synchronized in nature.
+  Therefore In Concurrent classes, we dont have to take care about Thread-safety.
+
+* While Traditional Collections also have some classes (like Vector, Stack etc) which are
+  synchronized in nature and Traditional Collections also have SynchronizedSet, SynchronizedList,
+  SynchronizedMap methods through which we can get Synchronized version of non-synchronized
+  objects. But these above Synchronized classes are not good in terms of performance because
+  of wide-locking mechanism .Whereas Concurrent Collections classes performance are relatively
+  high than Traditional Collections classes.
+
+* In the Traditional Collections, if a thread is iterating a Collection object and if another
+  thread try to add new element in that iterating object simultaneously then we will get
+  RuntimeException ConcurrentModificationException. Whereas In the above case, we will not
+  get any Runtime Exception if we are Working with Concurrent Collections Classes.
+
+* Traditional Collections classes is good choice if we are not dealing with thread in our 
+  application. whereas because of the Concurrent/Synchronized Collection we can use multiple
+  Threads which are dealing with Collections Object. Therefore Concurrent Collections are best
+  choice if we are dealing Multiple Threads in our application.
+
+Here we have some java Concurrent collection classes:
+1. Immutable List in Java
+2. CopyOnWriteArrayList in java
+3. Immutable Set in Java
+4. CopyOnWriteArraySet in java
+5. ConcurrentHashMap in java
+
+//Java program to illustrate Traditional Collections Problem
+import java.util.*;
+class ConcurrentDemo extends Thread {
+	static ArrayList l = new ArrayList();
+	public void run()
+	{
+		try {
+			Thread.sleep(2000);
+		}
+		catch (InterruptedException e) {
+			System.out.println("Child Thread"
+					+ " going to add element");
+		}
+
+		// Child thread trying to add new
+		// element in the Collection object
+		l.add("D");
+	}
+
+	public static void main(String[] args)
+		throws InterruptedException
+	{
+		l.add("A");
+		l.add("B");
+		l.add("c");
+
+		// We create a child thread that is
+		// going to modify ArrayList l.
+		ConcurrentDemo t = new ConcurrentDemo();
+		t.start();
+
+		// Now we iterate through the ArrayList
+		// and get exception.
+		Iterator itr = l.iterator();
+		while (itr.hasNext()) {
+			String s = (String)itr.next();
+			System.out.println(s);
+			Thread.sleep(6000);
+		}
+		System.out.println(l);
+	}
+}
+
+=================================================================================================================
+
+//Java program to illustrate ConcurrentCollection uses
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
+class ConcurrentDemo extends Thread {
+	static CopyOnWriteArrayList l =
+					new CopyOnWriteArrayList();
+	public void run()
+	{
+		try {
+			Thread.sleep(2000);
+		}
+		catch (InterruptedException e) {
+			System.out.println("Child Thread"
+					+ " going to add element");
+		}
+
+		// Child thread trying to add new
+		// element in the Collection object
+		l.add("D");
+	}
+
+	public static void main(String[] args)
+		throws InterruptedException
+	{
+		l.add("A");
+		l.add("B");
+		l.add("c");
+
+		// We create a child thread that is
+		// going to modify ArrayList l.
+		ConcurrentDemo t = new ConcurrentDemo();
+		t.start();
+
+		// Now we iterate through the ArrayList
+		// and get exception.
+		Iterator itr = l.iterator();
+		while (itr.hasNext()) {
+			String s = (String)itr.next();
+			System.out.println(s);
+			Thread.sleep(6000);
+		}
+		System.out.println(l);
+	}
+}
+
+==============================================================================================
