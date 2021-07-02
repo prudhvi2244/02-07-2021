@@ -35,6 +35,7 @@ Here we have some java Concurrent collection classes:
 4. CopyOnWriteArraySet in java
 5. ConcurrentHashMap in java
 
+
 //Java program to illustrate Traditional Collections Problem
 import java.util.*;
 class ConcurrentDemo extends Thread {
@@ -49,8 +50,7 @@ class ConcurrentDemo extends Thread {
 					+ " going to add element");
 		}
 
-		// Child thread trying to add new
-		// element in the Collection object
+		// Child thread trying to add new element in the Collection object
 		l.add("D");
 	}
 
@@ -61,13 +61,11 @@ class ConcurrentDemo extends Thread {
 		l.add("B");
 		l.add("c");
 
-		// We create a child thread that is
-		// going to modify ArrayList l.
+		// We create a child thread that is going to modify ArrayList l.
 		ConcurrentDemo t = new ConcurrentDemo();
 		t.start();
 
-		// Now we iterate through the ArrayList
-		// and get exception.
+		// Now we iterate through the ArrayList and get exception.
 		Iterator itr = l.iterator();
 		while (itr.hasNext()) {
 			String s = (String)itr.next();
@@ -84,8 +82,7 @@ class ConcurrentDemo extends Thread {
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.*;
 class ConcurrentDemo extends Thread {
-	static CopyOnWriteArrayList l =
-					new CopyOnWriteArrayList();
+	static CopyOnWriteArrayList l =	new CopyOnWriteArrayList();
 	public void run()
 	{
 		try {
@@ -126,3 +123,274 @@ class ConcurrentDemo extends Thread {
 }
 
 ==============================================================================================
+What is an immutable List in Java?
+* As you know List provides some Classes like ArrayList that is growable Array that can increase
+  or decrease the size itself when the modification is done by the user.
+* An immutable List is a type of List that is immutable. It means the immutable List is
+  read-only. You can’t modify the content of the immutable List after declaration.
+  So an immutable list is threaded safe.
+
+Advantages/Need of immutable list
+............................................
+* As you know, an immutable object will not change after the declaration. These objects are
+  thread-safe by default. Because multiple threads can read them only, they can’t change the
+  object’s state. 
+
+* Suppose we have an immutable List with some values. It means the object is immutable and 
+  carries some values
+* The immutable list is thread-safe because Making it immutable will create a “read-only”
+  version of our set.
+* if the user tries to modify(add or remove from list ) the list then the compiler will throw
+  UnsupportedOperationException.
+* The most common use case of an immutable set is in a multi-threaded environment.
+* Multiple threads can share immutable set data without worrying about synchronization
+
+
+How does it work?
+.............................
+* In an immutable list, the user can modify the object properties but not the object.
+* Let’s say you have an immutable list that stores the 5 students’ records. Each student has
+  a name, class, roll no, etc.
+* You can change the name of the student, class name, and roll no. But you can’t change the 
+  number of students in the immutable list (add or delete student).
+
+
+..............................................................................................
+
+import java.util.List;
+
+public class ImmutableListExample
+{
+    public static void main(String[] args) 
+    {
+        Student student1 = new Student(1, "MCA", "Ravi");
+        Student student2 = new Student(2, "BCA", "Ram");
+        Student student3 = new Student(3, "BCA", "Ravi");
+        
+        //creating list by using of() method
+        List<Student> immutableList = List.of(student1, student2, student3); 
+        
+        for(Student s : immutableList)
+        {
+            System.out.println("Rollno :" + s.getRollNo());
+            System.out.println("Class Name :" + s.getClassName());
+            System.out.println("Name :" + s.getName());
+        }
+        
+        // Changing the class Name of rollno 2
+        immutableList.get(1).setClassName("MCA");
+        
+        System.out.println("After make chnges of Rollno 2: "+ immutableList.get(1).getClassName());   
+    }
+}
+
+................................................................................................
+
+class Student
+{
+    int rollNo;
+    String className;
+    String name;
+    public int getRollNo() {
+        return rollNo;
+    }
+    public void setRollNo(int rollNo) {
+        this.rollNo = rollNo;
+    }
+    public String getClassName() {
+        return className;
+    }
+    public void setClassName(String className) {
+        this.className = className;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public Student(int rollNo, String className, String name) {
+        this.rollNo = rollNo;
+        this.className = className;
+        this.name = name;
+    }
+}
+
+...............................................................................................
+
+Creating Immutable List in Java
+==================================================
+You can create an immutable list in various ways.
+
+1. By use of copyOf() method We can create ImmutableList
+
+...............................................................................................
+
+import com.google.common.collect.ImmutableList; 
+import java.util.*; 
+
+class ExampleOfImmutableList
+{ 
+    public static void main(String[] args) 
+    {
+        // Create Immutablelist using copyOf() 
+        ImmutableList<String> immutableList2 = 
+                        ImmutableList.copyOf(Arrays.asList("Learning", "Web", "Site")); 
+        
+        
+    List<String> list = new ArrayList<String>(Arrays.asList("Java", "Goal", "com")); 
+        
+       // Create Immutablelist from existing list by using copyOf() 
+        ImmutableList<String> immutableList1 = 
+                        ImmutableList.copyOf(list); 
+      
+      // Print the Immutablelist
+        System.out.println(immutableList1); 
+      // Print the Immutablelist
+        System.out.println(immutableList2); 
+    }
+}
+
+2. By using of() method of ImmutableList class we can create ImmutableList
+
+...............................................................................................
+
+import com.google.common.collect.ImmutableList; 
+import java.util.*; 
+
+class ExampleOfImmutableList
+{ 
+
+    public static void main(String[] args) 
+    {
+        // Create Immutablelist using Of() method
+        ImmutableList<String> immutableList = 
+                        ImmutableList.of("Learning", "Web", "Site", "Java", "Goal"); 
+        
+      // Print the Immutablelist
+        System.out.println(immutableList); 
+    }
+}
+
+
+3. We can create ImmutableList by Using of() method List Class in Java 9 Factory.
+
+...............................................................................................
+
+import java.util.List; 
+
+public class ImmutableListExample
+{
+    public static void main(String[] args) 
+    {
+        // non-empty immutable set 
+        List<String> list = List.of(Learning", "Web", "Site", "Java", "Goal"); 
+  
+        // Let's print the list 
+        System.out.println(list); }
+}
+
+...............................................................................................
+
+4.We can create ImmutableList by Using Builder() method
+
+..................................................................................................
+import com.google.common.collect.ImmutableList; 
+import java.util.List;
+
+class ImmutableListExample
+{ 
+    public static void main(String[] args) 
+    {
+        // creating immutable list   
+        ImmutableList<String> newImmutableList = ImmutableList.<String>builder() 
+                                        .add("Java", "Goal") 
+                                        .build(); 
+                                          
+         List<String> existingImmutableList = List.of("Java", "Goal", "com"); 
+// creating immutable list from existing       
+ ImmutableList<String> list2 = ImmutableList.<String>builder() 
+                                          .addAll(existingImmutableList) 
+                                          .build(); 
+                                          
+        List<String> existingImmutableList2 = List.of("Java", "Goal", "com"); 
+     // creating immutable listfrom existing and add more element  
+ ImmutableList<String> list3 = ImmutableList.<String>builder() 
+                                          .addAll(existingImmutableList2) 
+                                          .add("Learning", "Website") 
+                                          .build(); 
+                                           
+        // Let's print the List 
+        System.out.println(newImmutableList);
+        System.out.println(list2);
+         System.out.println(list3);
+    }
+    
+}
+
+..............................................................................................
+
+The important concepts of Immutable List
+* If a user tries to modify the immutable List(add, delete and update elements in the List)
+then UnsupportedOperationException is thrown. Because you can’t modify an immutable List.
+
+..............................................................................................
+
+import java.util.List;
+
+public class ImmutableListExample
+{
+    public static void main(String[] args) 
+    {
+        List<String> immutableList = List.of("Java", "Goal", "com"); 
+        // Let's print the list 
+        System.out.println(immutableList);
+        
+        //try to add the element in list
+        immutableList.remove("Hello");
+    }
+}
+
+..............................................................................................
+
+* An Immutable List does not allow any null element. If a user tries to add null in the
+ Immutable List the compiler will throw UnsupportedOperationException.
+
+...............................................................................................
+
+import java.util.List;
+
+public class ImmutableListExample
+{
+    public static void main(String[] args) 
+    {
+        List<String> immutableList = List.of("Java", "Goal", "com"); 
+        // Let's print the list 
+        System.out.println(immutableList);
+        
+        //try to add the element in list
+        immutableList.add("Hello");
+    }
+}
+
+
+.................................................................................................
+
+* If a user tries to create an Immutable List with a null element, then the compiler will throw  NullPointerException.
+
+.................................................................................................
+
+import java.util.List;
+
+public class ImmutableListExample
+{
+    public static void main(String[] args) 
+    {
+        List<String> immutableList = List.of("Java", "Goal", null); 
+        // Let's print the list 
+        System.out.println(immutableList);
+    }
+}
+
+................................................................................................
+* If the user is creating an ImmutableList from an existing List and change the existing List, then the changes don’t reflect on ImmutableList. Because we have created a copy of the existing list.
